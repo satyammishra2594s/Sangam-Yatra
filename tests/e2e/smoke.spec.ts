@@ -1,0 +1,1 @@
+import {test,expect} from '@playwright/test';test('home loads',async({page})=>{await page.goto('/');await expect(page.getByText('Sangam Yatra')).toBeVisible();await expect(page.getByRole('heading',{name:/गया यात्रा/})).toBeVisible()});
