@@ -1,6 +1,4 @@
 import './globals.css';
-import {NextIntlClientProvider} from 'next-intl';
-import {getLocale, getMessages} from 'next-intl/server';
 import {Header} from '@/components/header';
 import {Footer} from '@/components/footer';
 
@@ -10,22 +8,17 @@ export const metadata = {
     'A transparent directory for stays, pandas and local services in Gaya, Bihar.',
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const locale = await getLocale();
-  const messages = await getMessages();
-
   return (
-    <html lang={locale}>
+    <html lang="hi">
       <body>
-        <NextIntlClientProvider messages={messages}>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-        </NextIntlClientProvider>
+        <Header />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
