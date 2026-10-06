@@ -1,0 +1,1 @@
+import {describe,expect,it} from 'vitest';import {money,whatsappUrl} from '@/lib/utils';describe('utils',()=>{it('formats INR',()=>expect(money(1250)).toContain('1,250'));it('builds WhatsApp URL',()=>expect(whatsappUrl('+91 98765 43210','Hello')).toContain('https://wa.me/919876543210'))})
