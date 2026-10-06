@@ -80,3 +80,5 @@ Finish and verify the dedicated admin editor screens, image upload/reorder UI, f
 Full CRUD for every category, complete filters and map view, date-aware pricing, panda slots, richer request fields, profile deletion, CSV import, then future owner logins, payments, reviews and more tirthas.
 
 See ASSUMPTIONS.md for decisions made without asking questions.
+
+<!-- deployment trigger: source is intentionally touched so Vercel receives the current main revision -->
