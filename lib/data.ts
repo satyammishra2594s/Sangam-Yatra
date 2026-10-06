@@ -33,8 +33,9 @@ export async function getListings(category?:Category,params?:{q?:string;locality
     if(params?.sort==='nearest') rows=[...rows].sort((a,b)=>(a.distance_to_vishnupad_km??999)-(b.distance_to_vishnupad_km??999));
     return rows;
   }
-  const supabase=await createClient();
-  let query=supabase.from('listings').select('*,listing_images(*)').eq('status','published');
+  try {
+    const supabase=await createClient();
+    let query=supabase.from('listings').select('*,listing_images(*)').eq('status','published');
   if(category)query=query.eq('category',category);
   if(params?.q)query=query.or(`title.ilike.%${params.q}%,title_hi.ilike.%${params.q}%,description.ilike.%${params.q}%`);
   if(params?.locality)query=query.eq('locality',params.locality);
@@ -44,14 +45,21 @@ export async function getListings(category?:Category,params?:{q?:string;locality
   else query=query.order('featured',{ascending:false}).order('sort_order',{ascending:true});
   const{data,error}=await query.limit(48);
   if(error)throw error;
-  return((data??[])as any[]).map(row=>({...row,images:(row.listing_images??[]).map((img:any)=>({...img,public_url:img.public_url||img.storage_path}))}))as Listing[];
+    return((data??[])as any[]).map(row=>({...row,images:(row.listing_images??[]).map((img:any)=>({...img,public_url:img.public_url||img.storage_path}))}))as Listing[];
+  } catch {
+    return fallback.filter(x=>!category||x.category===category);
+  }
 }
 
 export async function getListing(slug:string){
   if(!hasSupabaseEnv()) return fallback.find(x=>x.slug===slug)??null;
-  const supabase=await createClient();
-  const{data,error}=await supabase.from('listings').select('*,listing_images(*),stay_details(*),panda_details(*),food_details(*),transport_details(*),shop_details(*),guide_details(*),other_details(*)').eq('slug',slug).eq('status','published').maybeSingle();
+  try {
+    const supabase=await createClient();
+    const{data,error}=await supabase.from('listings').select('*,listing_images(*),stay_details(*),panda_details(*),food_details(*),transport_details(*),shop_details(*),guide_details(*),other_details(*)').eq('slug',slug).eq('status','published').maybeSingle();
   if(error)throw error;
   if(!data)return null;
-  return{...data,images:(data.listing_images??[]).map((img:any)=>({...img,public_url:img.public_url||img.storage_path}))}as Listing;
+    return{...data,images:(data.listing_images??[]).map((img:any)=>({...img,public_url:img.public_url||img.storage_path}))}as Listing;
+  } catch {
+    return null;
+  }
 }
