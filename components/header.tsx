@@ -1,1 +1,59 @@
-'use client';import Link from 'next/link';import {usePathname} from 'next/navigation';import {Menu} from 'lucide-react';import {useState} from 'react';const nav=[['/','होम'],['/listings/stay','ठहरने'],['/listings/panda','पंडित'],['/listings/food','भोजन'],['/listings/transport','यातायात'],['/listings/shop','पूजा सामग्री']];export function Header(){const[open,setOpen]=useState(false);const path=usePathname();return <header className="sticky top-0 z-40 border-b border-[#eadfd2] bg-[#fffaf2]/95 backdrop-blur"><div className="container flex min-h-16 items-center justify-between gap-3"><Link href="/" className="text-xl font-black text-[#6f1d2b]">Sangam Yatra</Link><nav className="hidden gap-1 md:flex">{nav.map(([href,label])=><Link key={href} className="tap rounded-lg px-3 py-2 text-sm font-semibold" href={href}>{label}</Link>)}</nav><div className="flex items-center gap-2"><Link href="/en" className="btn btn-ghost text-sm">EN</Link><Link href="/auth/login" className="btn btn-primary text-sm">लॉग इन</Link><button aria-label="menu" className="btn btn-ghost md:hidden" onClick={()=>setOpen(!open)}><Menu size={20}/></button></div></div>{open&&<nav className="container grid gap-1 pb-3 md:hidden">{nav.map(([href,label])=><Link key={href} className="tap rounded-lg p-3 font-semibold" href={href}>{label}</Link>)}</nav>}</header>}
+'use client';
+
+import Link from 'next/link';
+import {Menu} from 'lucide-react';
+import {useState} from 'react';
+
+const nav = [
+  ['/','होम'],
+  ['/listings/stay','ठहरने'],
+  ['/listings/panda','पंडित'],
+  ['/listings/food','भोजन'],
+  ['/listings/transport','यातायात'],
+  ['/listings/shop','पूजा सामग्री'],
+] as const;
+
+export function Header() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-40 border-b border-[#eadfd2] bg-[#fffaf2]/95 backdrop-blur">
+      <div className="container flex min-h-16 items-center justify-between gap-3">
+        <Link href="/" className="text-xl font-black text-[#6f1d2b]">
+          Sangam Yatra
+        </Link>
+
+        <nav className="hidden gap-1 md:flex">
+          {nav.map(([href, label]) => (
+            <Link key={href} className="tap rounded-lg px-3 py-2 text-sm font-semibold" href={href}>
+              {label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <Link href="/auth/login" className="btn btn-primary text-sm">
+            लॉग इन
+          </Link>
+          <button
+            aria-label="menu"
+            className="btn btn-ghost md:hidden"
+            onClick={() => setOpen(!open)}
+          >
+            <Menu size={20} />
+          </button>
+        </div>
+      </div>
+
+      {open && (
+        <nav className="container grid gap-1 pb-3 md:hidden">
+          {nav.map(([href, label]) => (
+            <Link key={href} className="tap rounded-lg p-3 font-semibold" href={href}>
+              {label}
+            </Link>
+          ))}
+        </nav>
+      )}
+    </header>
+  );
+}
